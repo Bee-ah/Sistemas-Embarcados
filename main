@@ -1,0 +1,48 @@
+#define blue RB0_bit
+#define green RB1_bit
+#define red RB2_bit
+
+char uart_rd;
+
+
+void main() {
+     TRISB=0x00;
+     PORTB.RB0=0;
+     PORTB.RB1=0;
+     PORTB.RB2=0;  // set all PORTC bits output
+     UART1_Init(9600);               // Initialize UART module at 9600 bps
+     Delay_ms(100);                  // Wait for UART module to stabilize
+
+     UART1_Write_Text("Start");
+     UART1_Write(10);
+     UART1_Write(13);
+
+  while (1) {
+                     // Endless loop
+    if (UART1_Data_Ready()) {     // If data is received,
+      uart_rd = UART1_Read();     // read the received data,
+      UART1_Write(uart_rd);       // and send data via UART
+
+    }
+    switch(uart_rd){
+        case 'g':
+             green = 0x01;
+             Delay_ms(100);
+             green=0x00;
+             break;
+        case 'b':
+             blue = 1;
+             Delay_ms(100);
+             blue=0x00;
+             break;
+        case 'r':
+             red =1;
+             Delay_ms(100);
+             red=0x00;
+             break;
+    }
+
+
+
+}
+}
